@@ -1,0 +1,31 @@
+﻿@page 
+@model IdentityServerAdmin.Pages.ClientScope.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Client Scope</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ClientScope.Scope)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ClientScope.Scope)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ClientScope.ClientId)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ClientScope.ClientId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.ClientScope.Id">Edit</a> |
+    <a asp-page="../Api/Details" asp-route-id="@Model.ClientScope.ClientId">Back to Api Details</a>
+</div>

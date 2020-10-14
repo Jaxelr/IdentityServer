@@ -1,0 +1,59 @@
+﻿@page
+@model IdentityServerAdmin.Pages.Api.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Api Index</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Api[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Api[0].DisplayName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Api[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Api[0].Enabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Api[0].NonEditable)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Api)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Enabled)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NonEditable)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    <a asp-page="Create">Create New Api</a>
+</p>

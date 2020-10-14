@@ -1,0 +1,66 @@
+﻿@page 
+@model IdentityServerAdmin.Pages.ApiScope.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Api Scope</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ApiScope.Id" />
+            <div class="form-group">
+                <label asp-for="ApiScope.Name" class="control-label"></label>
+                <input asp-for="ApiScope.Name" class="form-control" />
+                <span asp-validation-for="ApiScope.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApiScope.DisplayName" class="control-label"></label>
+                <input asp-for="ApiScope.DisplayName" class="form-control" />
+                <span asp-validation-for="ApiScope.DisplayName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApiScope.Description" class="control-label"></label>
+                <input asp-for="ApiScope.Description" class="form-control" />
+                <span asp-validation-for="ApiScope.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ApiScope.Emphasize" /> @Html.DisplayNameFor(model => model.ApiScope.Emphasize)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ApiScope.Required" /> @Html.DisplayNameFor(model => model.ApiScope.Required)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ApiScope.ShowInDiscoveryDocument" /> @Html.DisplayNameFor(model => model.ApiScope.ShowInDiscoveryDocument)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApiScope.ApiResourceId" class="control-label"></label>
+                <input asp-for="ApiScope.ApiResourceId" class="form-control" readonly="readonly" type="text" />
+                <span asp-validation-for="ApiScope.ApiResourceId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ValidationMessage("DupeName", new { @class = "text-danger" })
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="../Api/Details" asp-route-id="@Model.ApiScope.ApiResourceId">Back to Api Details</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

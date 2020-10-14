@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerAdmin", "IdentityServerAdmin\IdentityServerAdmin.csproj", "{AFE87D3F-7E59-4108-9184-96140C73A127}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionItems", ".SolutionItems", "{EDBFD458-81F4-44FD-9301-0BB2C9F61F69}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServerApi\IdentityServer.csproj", "{5DFA4690-6B60-4270-9114-4777F708076C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AFE87D3F-7E59-4108-9184-96140C73A127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE87D3F-7E59-4108-9184-96140C73A127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE87D3F-7E59-4108-9184-96140C73A127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE87D3F-7E59-4108-9184-96140C73A127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DFA4690-6B60-4270-9114-4777F708076C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DFA4690-6B60-4270-9114-4777F708076C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DFA4690-6B60-4270-9114-4777F708076C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DFA4690-6B60-4270-9114-4777F708076C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA1CDD6A-FE99-4BB6-8CDE-AC327628949B}
+	EndGlobalSection
+EndGlobal

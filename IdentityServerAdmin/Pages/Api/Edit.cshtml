@@ -1,0 +1,54 @@
+﻿@page
+@model IdentityServerAdmin.Pages.Api.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Api</h1>
+<hr />
+<div class="row">
+    <div class="col-md-5">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Api.Id" />
+            <div class="form-group">
+                <label asp-for="Api.Name" class="control-label"></label>
+                <input asp-for="Api.Name" class="form-control" />
+                <span asp-validation-for="Api.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Api.DisplayName" class="control-label"></label>
+                <input asp-for="Api.DisplayName" class="form-control" />
+                <span asp-validation-for="Api.DisplayName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Api.Description" class="control-label"></label>
+                <input asp-for="Api.Description" class="form-control" />
+                <span asp-validation-for="Api.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Api.Enabled" /> @Html.DisplayNameFor(model => model.Api.Enabled)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Api.NonEditable" /> @Html.DisplayNameFor(model => model.Api.NonEditable)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ValidationMessage("DupeName", new { @class = "text-danger" })
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

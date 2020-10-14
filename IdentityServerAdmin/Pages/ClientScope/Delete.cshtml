@@ -1,0 +1,41 @@
+﻿@page 
+@model IdentityServerAdmin.Pages.ClientScope.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ClientScope</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ClientScope.Scope)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ClientScope.Scope)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ClientScope.ClientId)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ClientScope.ClientId)
+        </dd>
+    </dl>
+
+    <div>
+        <form method="post">
+            <input type="hidden" asp-for="ClientScope.Id" />
+            <input type="hidden" asp-for="ClientScope.ClientId" />
+            <input type="submit" value="Remove" class="btn btn-danger" />
+        </form>
+    </div>
+    <br />
+    <div>
+        <a asp-page="../Api/Details" asp-route-id="@Model.ClientScope.ClientId">Back to Api Details</a>
+    </div>
+
+</div>

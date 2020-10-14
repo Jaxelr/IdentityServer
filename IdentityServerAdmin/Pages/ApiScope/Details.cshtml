@@ -1,0 +1,61 @@
+﻿@page 
+@model IdentityServerAdmin.Pages.ApiScope.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Api Scope</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ApiScope.Name)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ApiScope.Name)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ApiScope.DisplayName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ApiScope.DisplayName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ApiScope.Description)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ApiScope.Description)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ApiScope.Emphasize)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ApiScope.Emphasize)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ApiScope.Required)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ApiScope.Required)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ApiScope.ShowInDiscoveryDocument)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ApiScope.ShowInDiscoveryDocument)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ApiScope.ApiResourceId)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ApiScope.ApiResourceId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.ApiScope.Id">Edit</a> |
+    <a asp-page="../Api/Details" asp-route-id="@Model.ApiScope.ApiResourceId">Back to Api Details</a>
+</div>

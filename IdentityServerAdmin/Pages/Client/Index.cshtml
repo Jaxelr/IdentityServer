@@ -1,0 +1,72 @@
+﻿@page
+@model IdentityServerAdmin.Pages.Client.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Client Index</h1>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].Enabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].ProtocolType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].ClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].ClientUri)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].LogoUri)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Client)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Enabled)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProtocolType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientUri)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LogoUri)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    <a asp-page="Create">Create New Client</a>
+</p>

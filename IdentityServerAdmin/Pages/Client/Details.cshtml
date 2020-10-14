@@ -1,0 +1,167 @@
+﻿@page
+@model IdentityServerAdmin.Pages.Client.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Client Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.Enabled)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.Enabled)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.ClientId)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.ClientId)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.ProtocolType)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.ProtocolType)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.ClientName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.ClientName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.Description)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.Description)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.Password)
+        </dt>
+        <dd class="col-sm-9">
+            ********
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.ClientUri)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.ClientUri)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.LogoUri)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.LogoUri)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.FrontChannelLogoutUri)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.FrontChannelLogoutUri)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.BackChannelLogoutUri)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.BackChannelLogoutUri)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.IdentityTokenLifetime)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.IdentityTokenLifetime)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.AuthorizationCodeLifetime)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.AuthorizationCodeLifetime)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.ConsentLifetime)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.ConsentLifetime)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.AccessTokenLifetime)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.AccessTokenLifetime)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.UserSsoLifetime)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.UserSsoLifetime)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.UserCodeType)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.UserCodeType)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.AllowedIdentityTokenSigningAlgorithms)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.AllowedIdentityTokenSigningAlgorithms)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Client.DeviceCodeLifetime)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Client.DeviceCodeLifetime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Client.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+<br />
+<h4>Scopes list</h4>
+<div>
+    @if (Model.Client.Scopes.Count() > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Client.Scopes.FirstOrDefault().Scope)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Client.Scopes)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Scope)
+                        </td>
+                        <td>
+                            <a asp-page="../ClientScope/Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-page="../ClientScope/Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div>
+            <i>No scopes assigned to this client</i>
+        </div>
+    }
+</div>
+<p>
+    <a asp-page="../ClientScope/Create" asp-route-clientid="@Model.Client.Id">Assign Scope</a>
+</p>

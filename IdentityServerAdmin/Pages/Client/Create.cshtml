@@ -1,0 +1,117 @@
+﻿@page
+@model IdentityServerAdmin.Pages.Client.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Client</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Client.Enabled" /> @Html.DisplayNameFor(model => model.Client.Enabled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.ClientId" class="control-label"></label>
+                <input asp-for="Client.ClientId" class="form-control" />
+                <span asp-validation-for="Client.ClientId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.ProtocolType" class="control-label"></label>
+                <input asp-for="Client.ProtocolType" class="form-control" readonly="readonly" value="oidc" />
+                <span asp-validation-for="Client.ProtocolType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.ClientName" class="control-label"></label>
+                <input asp-for="Client.ClientName" class="form-control" />
+                <span asp-validation-for="Client.ClientName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.Description" class="control-label"></label>
+                <input asp-for="Client.Description" class="form-control" />
+                <span asp-validation-for="Client.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.Password" class="control-label"></label>
+                <input asp-for="Client.Password" class="form-control" type="password" />
+                <span asp-validation-for="Client.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.ClientUri" class="control-label"></label>
+                <input asp-for="Client.ClientUri" class="form-control" />
+                <span asp-validation-for="Client.ClientUri" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.LogoUri" class="control-label"></label>
+                <input asp-for="Client.LogoUri" class="form-control" />
+                <span asp-validation-for="Client.LogoUri" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.FrontChannelLogoutUri" class="control-label"></label>
+                <input asp-for="Client.FrontChannelLogoutUri" class="form-control" />
+                <span asp-validation-for="Client.FrontChannelLogoutUri" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.BackChannelLogoutUri" class="control-label"></label>
+                <input asp-for="Client.BackChannelLogoutUri" class="form-control" />
+                <span asp-validation-for="Client.BackChannelLogoutUri" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.IdentityTokenLifetime" class="control-label"></label>
+                <input asp-for="Client.IdentityTokenLifetime" class="form-control" type="text" />
+                <span asp-validation-for="Client.IdentityTokenLifetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.AuthorizationCodeLifetime" class="control-label"></label>
+                <input asp-for="Client.AuthorizationCodeLifetime" class="form-control" type="text" />
+                <span asp-validation-for="Client.AuthorizationCodeLifetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.ConsentLifetime" class="control-label"></label>
+                <input asp-for="Client.ConsentLifetime" class="form-control" type="text" />
+                <span asp-validation-for="Client.ConsentLifetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.AccessTokenLifetime" class="control-label"></label>
+                <input asp-for="Client.AccessTokenLifetime" class="form-control" type="text" />
+                <span asp-validation-for="Client.AccessTokenLifetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.UserSsoLifetime" class="control-label"></label>
+                <input asp-for="Client.UserSsoLifetime" class="form-control" type="text" />
+                <span asp-validation-for="Client.UserSsoLifetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.DeviceCodeLifetime" class="control-label"></label>
+                <input asp-for="Client.DeviceCodeLifetime" class="form-control" type="text" />
+                <span asp-validation-for="Client.DeviceCodeLifetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.UserCodeType" class="control-label"></label>
+                <input asp-for="Client.UserCodeType" class="form-control" />
+                <span asp-validation-for="Client.UserCodeType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.AllowedIdentityTokenSigningAlgorithms" class="control-label"></label>
+                <input asp-for="Client.AllowedIdentityTokenSigningAlgorithms" class="form-control" />
+                <span asp-validation-for="Client.AllowedIdentityTokenSigningAlgorithms" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
