@@ -21,11 +21,11 @@ namespace IdentityServer4.Quickstart.UI
     [AllowAnonymous]
     public class ExternalController : Controller
     {
-        private readonly TestUserStore _users;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IClientStore _clientStore;
-        private readonly ILogger<ExternalController> _logger;
-        private readonly IEventService _events;
+        private readonly TestUserStore users;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly IClientStore clientStore;
+        private readonly ILogger<ExternalController> logger;
+        private readonly IEventService events;
 
         public ExternalController(
             IIdentityServerInteractionService interaction,
@@ -36,12 +36,12 @@ namespace IdentityServer4.Quickstart.UI
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _users = users ?? new TestUserStore(RootUser.Users);
+            this.users = users ?? new TestUserStore(RootUser.Users);
 
-            _interaction = interaction;
-            _clientStore = clientStore;
-            _logger = logger;
-            _events = events;
+            this.interaction = interaction;
+            this.clientStore = clientStore;
+            this.logger = logger;
+            this.events = events;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace IdentityServer4.Quickstart.UI
             if (string.IsNullOrEmpty(returnUrl)) returnUrl = "~/";
 
             // validate returnUrl - either it is a valid OIDC URL or back to a local page
-            if (!Url.IsLocalUrl(returnUrl) && !_interaction.IsValidReturnUrl(returnUrl))
+            if (!Url.IsLocalUrl(returnUrl) && !interaction.IsValidReturnUrl(returnUrl))
             {
                 // user might have clicked on a malicious link - should be logged
                 throw new Exception("invalid return URL");
@@ -94,10 +94,10 @@ namespace IdentityServer4.Quickstart.UI
                 throw new Exception("External authentication error");
             }
 
-            if (_logger.IsEnabled(LogLevel.Debug))
+            if (logger.IsEnabled(LogLevel.Debug))
             {
                 var externalClaims = result.Principal.Claims.Select(c => $"{c.Type}: {c.Value}");
-                _logger.LogDebug("External claims: {@claims}", externalClaims);
+                logger.LogDebug("External claims: {@claims}", externalClaims);
             }
 
             // lookup our user and external provider info
@@ -126,15 +126,15 @@ namespace IdentityServer4.Quickstart.UI
                 .ConfigureAwait(false);
 
             // retrieve return URL
-            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
+            string returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
 
             // check if external login is in the context of an OIDC request
-            var context = await _interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
-            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.SubjectId, user.Username, true, context?.ClientId)).ConfigureAwait(false);
+            var context = await interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
+            await events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.SubjectId, user.Username, true, context?.ClientId)).ConfigureAwait(false);
 
             if (context != null)
             {
-                if (await _clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
+                if (await clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
                 {
                     // if the client is PKCE then we assume it's native, so this change in how to
                     // return the response is for better UX for the end user.
@@ -209,21 +209,18 @@ namespace IdentityServer4.Quickstart.UI
             var claims = externalUser.Claims.ToList();
             claims.Remove(userIdClaim);
 
-            var provider = result.Properties.Items["scheme"];
-            var providerUserId = userIdClaim.Value;
+            string provider = result.Properties.Items["scheme"];
+            string providerUserId = userIdClaim.Value;
 
             // find external user
-            var user = _users.FindByExternalProvider(provider, providerUserId);
+            var user = users.FindByExternalProvider(provider, providerUserId);
 
             return (user, provider, providerUserId, claims);
         }
 
-        private TestUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
-        {
-            return _users.AutoProvisionUser(provider, providerUserId, claims.ToList());
-        }
+        private TestUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims) => users.AutoProvisionUser(provider, providerUserId, claims.ToList());
 
-        private void ProcessLoginCallbackForOidc(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
+        private static void ProcessLoginCallbackForOidc(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
         {
             // if the external system sent a session id claim, copy it over
             // so we can use it for single sign-out
@@ -234,7 +231,7 @@ namespace IdentityServer4.Quickstart.UI
             }
 
             // if the external provider issued an id_token, we'll keep it for signout
-            var id_token = externalResult.Properties.GetTokenValue("id_token");
+            string id_token = externalResult.Properties.GetTokenValue("id_token");
             if (id_token != null)
             {
                 localSignInProps.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = id_token } });

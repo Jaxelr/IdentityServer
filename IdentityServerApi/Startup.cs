@@ -16,7 +16,7 @@ namespace IdentityServer
         public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
 
-        private string Policy => "MainPolicy";
+        private static string Policy => "MainPolicy";
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
@@ -54,7 +54,7 @@ namespace IdentityServer
                 iis.AutomaticAuthentication = false;
             });
 
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             var builder = services.AddIdentityServer(options =>
                 {
@@ -65,10 +65,7 @@ namespace IdentityServer
                 })
                 .AddTestUsers(RootUser.Users)
                 // this adds the config data from DB (clients, resources, CORS)
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString);
-                })
+                .AddConfigurationStore(options => options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString))
                 // this adds the operational data from DB (codes, tokens, consents)
                 .AddOperationalStore(options =>
                 {
@@ -89,7 +86,6 @@ namespace IdentityServer
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
 
             app.UseStaticFiles();
@@ -98,10 +94,7 @@ namespace IdentityServer
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
         }
     }
 }

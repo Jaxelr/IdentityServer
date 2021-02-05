@@ -28,7 +28,7 @@ namespace IdentityServer
 
             try
             {
-                var seed = args.Contains("/seed");
+                bool seed = args.Contains("/seed");
                 if (seed)
                 {
                     args = args.Except(new[] { "/seed" }).ToArray();
@@ -40,7 +40,7 @@ namespace IdentityServer
                 {
                     Log.Information("Seeding database...");
                     var config = host.Services.GetRequiredService<IConfiguration>();
-                    var connectionString = config.GetConnectionString("DefaultConnection");
+                    string connectionString = config.GetConnectionString("DefaultConnection");
                     SeedData.EnsureSeedData(connectionString);
                     Log.Information("Done seeding database.");
                     return 0;
