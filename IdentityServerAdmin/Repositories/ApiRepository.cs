@@ -44,6 +44,7 @@ namespace IdentityServerAdmin.Repositories
         {
             connection?.Close();
             connection?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }
