@@ -1,15 +1,15 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
+using IdentityServer4.Services;
+using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServer4.Quickstart.UI
 {
@@ -20,30 +20,27 @@ namespace IdentityServer4.Quickstart.UI
     [Authorize]
     public class GrantsController : Controller
     {
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IClientStore _clients;
-        private readonly IResourceStore _resources;
-        private readonly IEventService _events;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly IClientStore clients;
+        private readonly IResourceStore resources;
+        private readonly IEventService events;
 
         public GrantsController(IIdentityServerInteractionService interaction,
             IClientStore clients,
             IResourceStore resources,
             IEventService events)
         {
-            _interaction = interaction;
-            _clients = clients;
-            _resources = resources;
-            _events = events;
+            this.interaction = interaction;
+            this.clients = clients;
+            this.resources = resources;
+            this.events = events;
         }
 
         /// <summary>
         /// Show list of grants
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            return View("Index", await BuildViewModelAsync().ConfigureAwait(false));
-        }
+        public async Task<IActionResult> Index() => View("Index", await BuildViewModelAsync().ConfigureAwait(false));
 
         /// <summary>
         /// Handle postback to revoke a client
@@ -52,23 +49,23 @@ namespace IdentityServer4.Quickstart.UI
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Revoke(string clientId)
         {
-            await _interaction.RevokeUserConsentAsync(clientId).ConfigureAwait(false);
-            await _events.RaiseAsync(new GrantsRevokedEvent(User.GetSubjectId(), clientId)).ConfigureAwait(false);
+            await interaction.RevokeUserConsentAsync(clientId).ConfigureAwait(false);
+            await events.RaiseAsync(new GrantsRevokedEvent(User.GetSubjectId(), clientId)).ConfigureAwait(false);
 
             return RedirectToAction("Index");
         }
 
         private async Task<GrantsViewModel> BuildViewModelAsync()
         {
-            var grants = await _interaction.GetAllUserConsentsAsync().ConfigureAwait(false);
+            var grants = await interaction.GetAllUserConsentsAsync().ConfigureAwait(false);
 
             var list = new List<GrantViewModel>();
             foreach (var grant in grants)
             {
-                var client = await _clients.FindClientByIdAsync(grant.ClientId).ConfigureAwait(false);
+                var client = await clients.FindClientByIdAsync(grant.ClientId).ConfigureAwait(false);
                 if (client != null)
                 {
-                    var resources = await _resources.FindResourcesByScopeAsync(grant.Scopes).ConfigureAwait(false);
+                    var resources = await this.resources.FindResourcesByScopeAsync(grant.Scopes).ConfigureAwait(false);
 
                     var item = new GrantViewModel()
                     {

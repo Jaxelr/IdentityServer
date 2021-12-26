@@ -1,6 +1,9 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using IdentityModel;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
@@ -12,9 +15,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IdentityServer4.Quickstart.UI
 {
@@ -27,11 +27,11 @@ namespace IdentityServer4.Quickstart.UI
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly TestUserStore _users;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IClientStore _clientStore;
-        private readonly IAuthenticationSchemeProvider _schemeProvider;
-        private readonly IEventService _events;
+        private readonly TestUserStore users;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly IClientStore clientStore;
+        private readonly IAuthenticationSchemeProvider schemeProvider;
+        private readonly IEventService events;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
@@ -42,12 +42,12 @@ namespace IdentityServer4.Quickstart.UI
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _users = users ?? new TestUserStore(RootUser.Users);
+            this.users = users ?? new TestUserStore(RootUser.Users);
 
-            _interaction = interaction;
-            _clientStore = clientStore;
-            _schemeProvider = schemeProvider;
-            _events = events;
+            this.interaction = interaction;
+            this.clientStore = clientStore;
+            this.schemeProvider = schemeProvider;
+            this.events = events;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace IdentityServer4.Quickstart.UI
         public async Task<IActionResult> Login(LoginInputModel model, string button)
         {
             // check if we are in the context of an authorization request
-            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl).ConfigureAwait(false);
+            var context = await interaction.GetAuthorizationContextAsync(model.ReturnUrl).ConfigureAwait(false);
 
             // the user clicked the "cancel" button
             if (button != "login")
@@ -86,10 +86,10 @@ namespace IdentityServer4.Quickstart.UI
                     // if the user cancels, send a result back into IdentityServer as if they
                     // denied the consent (even if this client does not require consent).
                     // this will send back an access denied OIDC error response to the client.
-                    await _interaction.GrantConsentAsync(context, ConsentResponse.Denied).ConfigureAwait(false);
+                    await interaction.GrantConsentAsync(context, ConsentResponse.Denied).ConfigureAwait(false);
 
                     // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                    if (await _clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
+                    if (await clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
                     {
                         // if the client is PKCE then we assume it's native, so this change in how to
                         // return the response is for better UX for the end user.
@@ -108,10 +108,10 @@ namespace IdentityServer4.Quickstart.UI
             if (ModelState.IsValid)
             {
                 // validate username/password against in-memory store
-                if (_users.ValidateCredentials(model.Username, model.Password))
+                if (users.ValidateCredentials(model.Username, model.Password))
                 {
-                    var user = _users.FindByUsername(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.ClientId)).ConfigureAwait(false);
+                    var user = users.FindByUsername(model.Username);
+                    await events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.ClientId)).ConfigureAwait(false);
 
                     // only set explicit expiration here if user chooses "remember me".
                     // otherwise we rely upon expiration configured in cookie middleware.
@@ -123,14 +123,14 @@ namespace IdentityServer4.Quickstart.UI
                             IsPersistent = true,
                             ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
                         };
-                    };
+                    }
 
                     // issue authentication cookie with subject ID and username
                     await HttpContext.SignInAsync(user.SubjectId, user.Username, props).ConfigureAwait(false);
 
                     if (context != null)
                     {
-                        if (await _clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
+                        if (await clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
                         {
                             // if the client is PKCE then we assume it's native, so this change in how to
                             // return the response is for better UX for the end user.
@@ -157,7 +157,7 @@ namespace IdentityServer4.Quickstart.UI
                     }
                 }
 
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.ClientId)).ConfigureAwait(false);
+                await events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.ClientId)).ConfigureAwait(false);
                 ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
             }
 
@@ -201,7 +201,7 @@ namespace IdentityServer4.Quickstart.UI
                 await HttpContext.SignOutAsync().ConfigureAwait(false);
 
                 // raise the logout event
-                await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName())).ConfigureAwait(false);
+                await events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName())).ConfigureAwait(false);
             }
 
             // check if we need to trigger sign-out at an upstream identity provider
@@ -220,10 +220,7 @@ namespace IdentityServer4.Quickstart.UI
         }
 
         [HttpGet]
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
+        public IActionResult AccessDenied() => View();
 
         /*****************************************/
         /* helper APIs for the AccountController */
@@ -231,10 +228,10 @@ namespace IdentityServer4.Quickstart.UI
 
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
-            var context = await _interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
-            if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP).ConfigureAwait(false) != null)
+            var context = await interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
+            if (context?.IdP != null && await schemeProvider.GetSchemeAsync(context.IdP).ConfigureAwait(false) != null)
             {
-                var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
+                bool local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
 
                 // this is meant to short circuit the UI and only trigger the one external IdP
                 var vm = new LoginViewModel
@@ -252,7 +249,7 @@ namespace IdentityServer4.Quickstart.UI
                 return vm;
             }
 
-            var schemes = await _schemeProvider.GetAllSchemesAsync().ConfigureAwait(false);
+            var schemes = await schemeProvider.GetAllSchemesAsync().ConfigureAwait(false);
 
             var providers = schemes
                 .Where(x => x.DisplayName != null ||
@@ -264,10 +261,10 @@ namespace IdentityServer4.Quickstart.UI
                     AuthenticationScheme = x.Name
                 }).ToList();
 
-            var allowLocal = true;
+            bool allowLocal = true;
             if (context?.ClientId != null)
             {
-                var client = await _clientStore.FindEnabledClientByIdAsync(context.ClientId).ConfigureAwait(false);
+                var client = await clientStore.FindEnabledClientByIdAsync(context.ClientId).ConfigureAwait(false);
                 if (client != null)
                 {
                     allowLocal = client.EnableLocalLogin;
@@ -308,7 +305,7 @@ namespace IdentityServer4.Quickstart.UI
                 return vm;
             }
 
-            var context = await _interaction.GetLogoutContextAsync(logoutId).ConfigureAwait(false);
+            var context = await interaction.GetLogoutContextAsync(logoutId).ConfigureAwait(false);
             if (context?.ShowSignoutPrompt == false)
             {
                 // it's safe to automatically sign-out
@@ -324,7 +321,7 @@ namespace IdentityServer4.Quickstart.UI
         private async Task<LoggedOutViewModel> BuildLoggedOutViewModelAsync(string logoutId)
         {
             // get context information (client name, post logout redirect URI and iframe for federated signout)
-            var logout = await _interaction.GetLogoutContextAsync(logoutId).ConfigureAwait(false);
+            var logout = await interaction.GetLogoutContextAsync(logoutId).ConfigureAwait(false);
 
             var vm = new LoggedOutViewModel
             {
@@ -337,10 +334,10 @@ namespace IdentityServer4.Quickstart.UI
 
             if (User?.Identity.IsAuthenticated == true)
             {
-                var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
+                string idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
                 if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)
                 {
-                    var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp).ConfigureAwait(false);
+                    bool providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp).ConfigureAwait(false);
                     if (providerSupportsSignout)
                     {
                         if (vm.LogoutId == null)
@@ -348,7 +345,7 @@ namespace IdentityServer4.Quickstart.UI
                             // if there's no current logout context, we need to create one
                             // this captures necessary info from the current logged in user
                             // before we signout and redirect away to the external IdP for signout
-                            vm.LogoutId = await _interaction.CreateLogoutContextAsync().ConfigureAwait(false);
+                            vm.LogoutId = await interaction.CreateLogoutContextAsync().ConfigureAwait(false);
                         }
 
                         vm.ExternalAuthenticationScheme = idp;

@@ -1,16 +1,16 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using System.Linq;
+using System.Threading.Tasks;
 using IdentityServer4.Events;
+using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IdentityServer4.Quickstart.UI
 {
@@ -223,7 +223,7 @@ namespace IdentityServer4.Quickstart.UI
             return vm;
         }
 
-        private static ScopeViewModel CreateScopeViewModel(IdentityResource identity, bool check) => new ScopeViewModel
+        private static ScopeViewModel CreateScopeViewModel(IdentityResource identity, bool check) => new()
         {
             Name = identity.Name,
             DisplayName = identity.DisplayName,
@@ -233,7 +233,7 @@ namespace IdentityServer4.Quickstart.UI
             Checked = check || identity.Required
         };
 
-        public ScopeViewModel CreateScopeViewModel(Scope scope, bool check) => new ScopeViewModel
+        public ScopeViewModel CreateScopeViewModel(Scope scope, bool check) => new()
         {
             Name = scope.Name,
             DisplayName = scope.DisplayName,
@@ -243,7 +243,7 @@ namespace IdentityServer4.Quickstart.UI
             Checked = check || scope.Required
         };
 
-        private static ScopeViewModel GetOfflineAccessScope(bool check) => new ScopeViewModel
+        private static ScopeViewModel GetOfflineAccessScope(bool check) => new()
         {
             Name = IdentityServerConstants.StandardScopes.OfflineAccess,
             DisplayName = ConsentOptions.OfflineAccessDisplayName,

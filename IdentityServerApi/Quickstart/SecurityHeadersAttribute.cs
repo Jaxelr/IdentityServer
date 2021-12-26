@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -27,7 +26,7 @@ namespace IdentityServer4.Quickstart.UI
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
-                var csp = "default-src 'self'; object-src 'none'; frame-ancestors 'none'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';";
+                const string csp = "default-src 'self'; object-src 'none'; frame-ancestors 'none'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
                 //csp += "upgrade-insecure-requests;";
                 // also an example if you need client images to be displayed from twitter
@@ -45,7 +44,7 @@ namespace IdentityServer4.Quickstart.UI
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
-                var referrer_policy = "no-referrer";
+                const string referrer_policy = "no-referrer";
                 if (!context.HttpContext.Response.Headers.ContainsKey("Referrer-Policy"))
                 {
                     context.HttpContext.Response.Headers.Add("Referrer-Policy", referrer_policy);

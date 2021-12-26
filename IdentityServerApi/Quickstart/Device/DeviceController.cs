@@ -19,11 +19,11 @@ namespace IdentityServer4.Quickstart.UI.Device
     [SecurityHeaders]
     public class DeviceController : Controller
     {
-        private readonly IDeviceFlowInteractionService _interaction;
-        private readonly IClientStore _clientStore;
-        private readonly IResourceStore _resourceStore;
-        private readonly IEventService _events;
-        private readonly ILogger<DeviceController> _logger;
+        private readonly IDeviceFlowInteractionService interaction;
+        private readonly IClientStore clientStore;
+        private readonly IResourceStore resourceStore;
+        private readonly IEventService events;
+        private readonly ILogger<DeviceController> logger;
 
         public DeviceController(
             IDeviceFlowInteractionService interaction,
@@ -32,11 +32,11 @@ namespace IdentityServer4.Quickstart.UI.Device
             IEventService eventService,
             ILogger<DeviceController> logger)
         {
-            _interaction = interaction;
-            _clientStore = clientStore;
-            _resourceStore = resourceStore;
-            _events = eventService;
-            _logger = logger;
+            this.interaction = interaction;
+            this.clientStore = clientStore;
+            this.resourceStore = resourceStore;
+            events = eventService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -77,7 +77,7 @@ namespace IdentityServer4.Quickstart.UI.Device
         {
             var result = new ProcessConsentResult();
 
-            var request = await _interaction.GetAuthorizationContextAsync(model.UserCode).ConfigureAwait(false);
+            var request = await interaction.GetAuthorizationContextAsync(model.UserCode).ConfigureAwait(false);
             if (request == null) return result;
 
             ConsentResponse grantedConsent = null;
@@ -88,7 +88,7 @@ namespace IdentityServer4.Quickstart.UI.Device
                 grantedConsent = ConsentResponse.Denied;
 
                 // emit event
-                await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.ClientId, request.ScopesRequested)).ConfigureAwait(false);
+                await events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.ClientId, request.ScopesRequested)).ConfigureAwait(false);
             }
             // user clicked 'yes' - validate the data
             else if (model.Button == "yes")
@@ -109,7 +109,7 @@ namespace IdentityServer4.Quickstart.UI.Device
                     };
 
                     // emit event
-                    await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.ClientId, request.ScopesRequested, grantedConsent.ScopesConsented, grantedConsent.RememberConsent)).ConfigureAwait(false);
+                    await events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.ClientId, request.ScopesRequested, grantedConsent.ScopesConsented, grantedConsent.RememberConsent)).ConfigureAwait(false);
                 }
                 else
                 {
@@ -124,7 +124,7 @@ namespace IdentityServer4.Quickstart.UI.Device
             if (grantedConsent != null)
             {
                 // communicate outcome of consent back to identityserver
-                await _interaction.HandleRequestAsync(model.UserCode, grantedConsent).ConfigureAwait(false);
+                await interaction.HandleRequestAsync(model.UserCode, grantedConsent).ConfigureAwait(false);
 
                 // indicate that's it ok to redirect back to authorization endpoint
                 result.RedirectUri = model.ReturnUrl;
@@ -141,25 +141,25 @@ namespace IdentityServer4.Quickstart.UI.Device
 
         private async Task<DeviceAuthorizationViewModel> BuildViewModelAsync(string userCode, DeviceAuthorizationInputModel model = null)
         {
-            var request = await _interaction.GetAuthorizationContextAsync(userCode).ConfigureAwait(false);
+            var request = await interaction.GetAuthorizationContextAsync(userCode).ConfigureAwait(false);
             if (request != null)
             {
-                var client = await _clientStore.FindEnabledClientByIdAsync(request.ClientId).ConfigureAwait(false);
+                var client = await clientStore.FindEnabledClientByIdAsync(request.ClientId).ConfigureAwait(false);
                 if (client != null)
                 {
-                    var resources = await _resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested).ConfigureAwait(false);
+                    var resources = await resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested).ConfigureAwait(false);
                     if (resources != null && (resources.IdentityResources.Count > 0 || resources.ApiResources.Count > 0))
                     {
                         return CreateConsentViewModel(userCode, model, client, resources);
                     }
                     else
                     {
-                        _logger.LogError("No scopes matching: {0}", request.ScopesRequested.Aggregate((x, y) => x + ", " + y));
+                        logger.LogError("No scopes matching: {0}", request.ScopesRequested.Aggregate((x, y) => x + ", " + y));
                     }
                 }
                 else
                 {
-                    _logger.LogError("Invalid client id: {0}", request.ClientId);
+                    logger.LogError("Invalid client id: {0}", request.ClientId);
                 }
             }
 
@@ -194,42 +194,33 @@ namespace IdentityServer4.Quickstart.UI.Device
             return vm;
         }
 
-        private ScopeViewModel CreateScopeViewModel(IdentityResource identity, bool check)
+        private static ScopeViewModel CreateScopeViewModel(IdentityResource identity, bool check) => new()
         {
-            return new ScopeViewModel
-            {
-                Name = identity.Name,
-                DisplayName = identity.DisplayName,
-                Description = identity.Description,
-                Emphasize = identity.Emphasize,
-                Required = identity.Required,
-                Checked = check || identity.Required
-            };
-        }
+            Name = identity.Name,
+            DisplayName = identity.DisplayName,
+            Description = identity.Description,
+            Emphasize = identity.Emphasize,
+            Required = identity.Required,
+            Checked = check || identity.Required
+        };
 
-        public ScopeViewModel CreateScopeViewModel(Scope scope, bool check)
+        public ScopeViewModel CreateScopeViewModel(Scope scope, bool check) => new()
         {
-            return new ScopeViewModel
-            {
-                Name = scope.Name,
-                DisplayName = scope.DisplayName,
-                Description = scope.Description,
-                Emphasize = scope.Emphasize,
-                Required = scope.Required,
-                Checked = check || scope.Required
-            };
-        }
+            Name = scope.Name,
+            DisplayName = scope.DisplayName,
+            Description = scope.Description,
+            Emphasize = scope.Emphasize,
+            Required = scope.Required,
+            Checked = check || scope.Required
+        };
 
-        private ScopeViewModel GetOfflineAccessScope(bool check)
+        private static ScopeViewModel GetOfflineAccessScope(bool check) => new()
         {
-            return new ScopeViewModel
-            {
-                Name = IdentityServerConstants.StandardScopes.OfflineAccess,
-                DisplayName = ConsentOptions.OfflineAccessDisplayName,
-                Description = ConsentOptions.OfflineAccessDescription,
-                Emphasize = true,
-                Checked = check
-            };
-        }
+            Name = IdentityServerConstants.StandardScopes.OfflineAccess,
+            DisplayName = ConsentOptions.OfflineAccessDisplayName,
+            Description = ConsentOptions.OfflineAccessDescription,
+            Emphasize = true,
+            Checked = check
+        };
     }
 }
