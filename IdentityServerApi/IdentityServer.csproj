@@ -28,10 +28,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
-  <ItemGroup>
-    <SupportedPlatform Include="windows" />
-  </ItemGroup>
-
   <ProjectExtensions><VisualStudio><UserProperties wwwroot_4lib_4jquery_4jquery_1min_1map__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>
