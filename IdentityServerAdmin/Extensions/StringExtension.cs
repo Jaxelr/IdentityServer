@@ -24,10 +24,8 @@ namespace IdentityServerAdmin
             {
                 return string.Empty;
             }
-
-            using var sha = SHA256.Create();
             byte[] bytes = Encoding.UTF8.GetBytes(input);
-            byte[] hash = sha.ComputeHash(bytes);
+            byte[] hash = SHA256.HashData(bytes);
 
             return Convert.ToBase64String(hash);
         }
@@ -43,10 +41,8 @@ namespace IdentityServerAdmin
             {
                 return string.Empty;
             }
-
-            using var sha = SHA512.Create();
             byte[] bytes = Encoding.UTF8.GetBytes(input);
-            byte[] hash = sha.ComputeHash(bytes);
+            byte[] hash = SHA512.HashData(bytes);
 
             return Convert.ToBase64String(hash);
         }
