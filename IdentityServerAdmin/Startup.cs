@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using IdentityServerAdmin.Models;
 using IdentityServerAdmin.Repositories;
@@ -22,8 +23,11 @@ namespace IdentityServerAdmin
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ClientValidator>());
+            services.AddRazorPages();
+
+            services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters()
+                .AddValidatorsFromAssemblyContaining<ClientValidator>();
 
             var connection = new SqlConnection(Configuration.GetConnectionString("Default"));
 
