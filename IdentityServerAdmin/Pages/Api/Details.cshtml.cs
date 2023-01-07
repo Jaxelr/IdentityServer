@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using IdentityServerAdmin.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using model = IdentityServerAdmin.Models;
+using Model = IdentityServerAdmin.Models;
 
 namespace IdentityServerAdmin.Pages.Api
 {
@@ -16,7 +16,7 @@ namespace IdentityServerAdmin.Pages.Api
             this.repository = repository;
         }
 
-        public model.Api Api { get; set; }
+        public Model.Api Api { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

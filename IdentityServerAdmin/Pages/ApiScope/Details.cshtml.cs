@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using model = IdentityServerAdmin.Models;
+using Model = IdentityServerAdmin.Models;
 using IdentityServerAdmin.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,7 +16,7 @@ namespace IdentityServerAdmin.Pages.ApiScope
             this.repository = repository;
         }
 
-        public model.ApiScope ApiScope { get; set; }
+        public Model.ApiScope ApiScope { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

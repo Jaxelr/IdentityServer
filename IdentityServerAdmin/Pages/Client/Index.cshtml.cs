@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using IdentityServerAdmin.Repositories;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using model = IdentityServerAdmin.Models;
+using Model = IdentityServerAdmin.Models;
 
 namespace IdentityServerAdmin.Pages.Client
 {
@@ -15,7 +15,7 @@ namespace IdentityServerAdmin.Pages.Client
             this.repository = repository;
         }
 
-        public IList<model.Client> Client { get; set; }
+        public IList<Model.Client> Client { get; set; }
 
         public async Task OnGetAsync() =>
             Client = await repository.GetClients()

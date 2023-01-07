@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using IdentityServerAdmin.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using model = IdentityServerAdmin.Models;
+using Model = IdentityServerAdmin.Models;
 
 namespace IdentityServerAdmin.Pages.Client
 {
@@ -17,7 +17,7 @@ namespace IdentityServerAdmin.Pages.Client
         }
 
         [BindProperty]
-        public model.Client Client { get; set; }
+        public Model.Client Client { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using IdentityServerAdmin.Repositories;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using model = IdentityServerAdmin.Models;
+using Model = IdentityServerAdmin.Models;
 
 namespace IdentityServerAdmin.Pages.Api
 {
@@ -15,7 +15,7 @@ namespace IdentityServerAdmin.Pages.Api
             this.repository = repository;
         }
 
-        public IList<model.Api> Api { get; set; }
+        public IList<Model.Api> Api { get; set; }
 
         public async Task OnGetAsync() =>
             Api = await repository.GetApiResources()

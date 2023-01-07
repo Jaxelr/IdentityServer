@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using IdentityServerAdmin.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using model = IdentityServerAdmin.Models;
+using Model = IdentityServerAdmin.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IdentityServerAdmin.Pages.ClientScope
@@ -25,7 +25,7 @@ namespace IdentityServerAdmin.Pages.ClientScope
             return  Page();
         }
         [BindProperty]
-        public model.ClientScope ClientScope { get; set; }
+        public Model.ClientScope ClientScope { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {

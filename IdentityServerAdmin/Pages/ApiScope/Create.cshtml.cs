@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using IdentityServerAdmin.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using model = IdentityServerAdmin.Models;
+using Model = IdentityServerAdmin.Models;
 
 namespace IdentityServerAdmin.Pages.ApiScope
 {
@@ -27,7 +27,7 @@ namespace IdentityServerAdmin.Pages.ApiScope
         }
 
         [BindProperty]
-        public model.ApiScope ApiScope { get; set; }
+        public Model.ApiScope ApiScope { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
