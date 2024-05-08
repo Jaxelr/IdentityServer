@@ -1,10 +1,10 @@
-﻿using System.Data.SqlClient;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using IdentityServerAdmin.Models;
 using IdentityServerAdmin.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

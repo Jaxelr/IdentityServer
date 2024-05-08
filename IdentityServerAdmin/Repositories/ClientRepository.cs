@@ -1,5 +1,6 @@
 ﻿using IdentityServerAdmin.Models;
 using Insight.Database;
+using Insight.Database.Providers.MsSqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;

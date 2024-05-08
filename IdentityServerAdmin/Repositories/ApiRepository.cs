@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Threading.Tasks;
 using IdentityServerAdmin.Models;
 using Insight.Database;
+using Insight.Database.Providers.MsSqlClient;
 
 namespace IdentityServerAdmin.Repositories
 {
