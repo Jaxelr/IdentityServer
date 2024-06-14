@@ -66,8 +66,8 @@ namespace IdentityServer
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseSerilog();
                     webBuilder.UseIISIntegration();
-                });
+                })
+                .UseSerilog();
     }
 }
